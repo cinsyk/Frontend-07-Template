@@ -10,7 +10,7 @@ class TicTacToe {
       [0, 0, 0],
       [0, 0, 0]
     ];
-    this.gamePerson = 2;
+    this.gamePerson = 1;
     this.initBoard();
   }
 
