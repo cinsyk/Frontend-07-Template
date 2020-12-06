@@ -1,15 +1,20 @@
 class TicTacToe {
   constructor(dom) {
     this.parent = document.getElementById(dom);
+    this.reset();
+  }
+
+  reset () {
     this.chessList = [
       [0, 0, 0],
       [0, 0, 0],
       [0, 0, 0]
     ];
-    this.gamePerson = 1;
+    this.gamePerson = 2;
+    this.initBoard();
   }
 
-  initBoard() {
+  initBoard () {
     this.parent.innerHTML = '';
     // 双重循环拿到数据
     this.chessList.forEach((item, i) => {
@@ -26,23 +31,43 @@ class TicTacToe {
     });
   }
 
-  move(i, j) {
-    const { chessList, gamePerson } = this;
-    if (this.hasPoint(i, j)) {
+  move (i, j) {
+    if (this.hasPoint(this.chessList, i, j)) {
       alert('此处已被对方占领!');
       return;
     }
     this.setPoint(i, j);
+    if (!this.checkWin()) {
+      this.computerMove();
+    };
+  }
+
+  computerMove () {
+    const { point, result } = this.bestChioce(this.chessList, this.gamePerson);
+    console.log(point);
+    if (point) {
+      this.setPoint(...point);
+    }
+    this.checkWin();
+  }
+
+  checkWin () {
+    const { chessList, gamePerson } = this;
     this.initBoard();
     if (this.check(chessList, gamePerson)) {
       this.getInfo('is win');
+      setTimeout(() => {
+        this.reset()
+      }, 1000);
+      return true;
     }
-    this.willWin(chessList, gamePerson);
+    // if (!!this.willWin(chessList, gamePerson)) {
+    //   this.getInfo('will win')
+    // }
     this.changePerson();
-    this.bestChioce(chessList, gamePerson);
   }
 
-  check(list, value) {
+  check (list, value) {
     if (this.checkRows(list, value)) {
       return true;
     }
@@ -58,11 +83,11 @@ class TicTacToe {
     return false;
   }
 
-  willWin(listarr, value) {
+  willWin (listarr, value) {
     const len = listarr.length;
     for (let i = 0; i < len; i++) {
       for (let j = 0; j < len; j++) {
-        if (this.hasPoint(i, j)) {
+        if (this.hasPoint(listarr, i, j)) {
           continue;
         }
         const clonelist = this.clone(listarr);
@@ -75,18 +100,42 @@ class TicTacToe {
     return null;
   }
 
-  bestChioce(list, value) {
-    let p = this.willWin(list, value);
-    if (!!p) {
-      this.getInfo('will win');
+  bestChioce (list, value) {
+    let point = this.willWin(list, value);
+    if (!!point) {
       return {
-        point: p,
+        point,
         result: 1
       };
     }
+    const len = list.length;
+    let result = -2;
+    top: for (let i = 0; i < len; i++) {
+      for (let j = 0; j < len; j++) {
+        if (this.hasPoint(list, i, j)) {
+          continue;
+        }
+        const clonelist = this.clone(list);
+        clonelist[i][j] = value;
+        // 查看对方最后的策略
+        const opp = this.bestChioce(clonelist, 3 - value).result;
+        // 如果对方最坏的结果是我们最好的结果,所以要取反.
+        if (-opp > result) {
+          point = [i, j];
+          result = -opp;
+        }
+        if (result === 1) {
+          break top;
+        }
+      }
+    }
+    return {
+      point,
+      result: point ? result : 0
+    }
   }
-  
-  checkRows(list, value) {
+
+  checkRows (list, value) {
     const len = list.length;
     for (let i = 0; i < len; i++) {
       let win = true;
@@ -101,7 +150,7 @@ class TicTacToe {
       }
     }
   }
-  checkCols(list, value) {
+  checkCols (list, value) {
     const len = list.length;
     for (let i = 0; i < len; i++) {
       let win = true;
@@ -116,7 +165,7 @@ class TicTacToe {
       }
     }
   }
-  checkKitty1(list, value) {
+  checkKitty1 (list, value) {
     const len = list.length;
     let win = true;
     for (let i = 0; i < len; i++) {
@@ -129,7 +178,7 @@ class TicTacToe {
       return win;
     }
   }
-  checkKitty2(list, value) {
+  checkKitty2 (list, value) {
     const len = list.length;
     let win = true;
     for (let i = 0; i < len; i++) {
@@ -142,25 +191,25 @@ class TicTacToe {
       return win;
     }
   }
-  clone(list) {
+  clone (list) {
     return JSON.parse(JSON.stringify(list));
   }
-  getInfo(info) {
+  getInfo (info) {
     alert(`${this.getIcon(this.gamePerson)} ${info}`);
   }
-  getIcon(value) {
+  getIcon (value) {
     return value ? (value === 1 ? '🍦' : '🍧') : '';
   }
 
-  hasPoint(i, j) {
-    return !!this.chessList[i][j];
+  hasPoint (list, i, j) {
+    return !!list[i][j];
   }
 
-  setPoint(i, j) {
+  setPoint (i, j) {
     this.chessList[i][j] = this.gamePerson;
   }
 
-  changePerson() {
+  changePerson () {
     this.gamePerson = 3 - this.gamePerson;
   }
 }
