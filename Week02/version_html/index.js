@@ -34,10 +34,11 @@ class baseMap {
   async searchLoad (start, end) {
     // 先进先出，队列
     const { row, col } = this.cfg;
-    const queue = new Sorted([start], (a, b) => { return distance(a) - distance(b) });
+    const queue = new Sorted([start], (a, b) => { return distance(a, end) - distance(b, end) });
     const table = Object.create(this.mapData);
     const startIndex = start[0] * row + start[1];
     const endIndex = end[0] * row + end[1];
+    let i = 0;
     this.hasColor(startIndex, 3);
     this.hasColor(endIndex, 3);
     const insetArr = async (x, y, pre) => {
@@ -45,21 +46,26 @@ class baseMap {
         return
       }
       const index = x * row + y;
+      if (table[index] == 1) {
+        return;
+      }
       if (table[index] != 0) {
-        return
+        console.log('当前结点', [x, y]);
+        console.log('前一个结点(第一次)：', table[index]);
+        console.log('前一个结点(第二次)：', pre);
+        return;
       }
       table[index] = pre;
       this.hasColor(index, 2);
       queue.give([x, y]);
     }
 
-    const distance = (val) => {
-      return (val[0] - end[0]) ** 2 + (val[1] - end[1]) ** 2;
+    const distance = (val, point) => {
+      return (val[0] - point[0]) ** 2 + (val[1] - point[1]) ** 2;
     }
-
     while (queue.length) {
       let [x, y] = queue.take();
-
+      i++;
       if (x === end[0] && y === end[1]) {
         let path = [];
         while (x !== start[0] || y !== start[1]) {
@@ -81,6 +87,7 @@ class baseMap {
       await insetArr(x - 1, y + 1, [x, y]);
       await insetArr(x - 1, y - 1, [x, y]);
       await insetArr(x + 1, y - 1, [x, y]);
+
     }
     return null;
   }
