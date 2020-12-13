@@ -1,0 +1,41 @@
+body,
+html {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#map {
+  display: flex;
+  flex-wrap: wrap;
+  margin: auto;
+  border-top: 1px solid #eee;
+  border-left: 1px solid #eee;
+}
+
+.cell {
+  width: 1%;
+  padding-bottom: calc(1% - 2px);
+  border-bottom: 1px solid #eee;
+  border-right: 1px solid #eee;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.cell.iswall {
+  background-color: #ccc;
+}
+
+.cell.isload {
+  background-color: lightgreen;
+}
+
+.cell.ispath {
+  background-color: purple;
+}

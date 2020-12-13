@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>地图编辑器</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="map"></div>
+  <script src="index.js"></script>
+  <script>
+    const map = new baseMap('#map');
+    map.initMap();
+    map.searchLoad([0, 0], [50, 50]);
+  </script>
+</body>
+
+</html>
