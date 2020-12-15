@@ -1,8 +1,68 @@
-# 寻路算法的演化
-> 如何在最短时间内找到一条到达目的地路径最短的路线
+# 如何用javascript实现寻路算法
+最近参加winter老师的前端训练营，上周的作业是实现一个最优的寻路算法，非科班出生的我，对于寻路算法的概念及实现都不甚了解，虽然勉强实现了基本寻路效果，但是对于如何优化毫无想法。痛定思痛，从最基础开始学习，彻底理解寻路算法！
 
-```图```  ```BFS``` ```DFS```
-## 广（宽）度优先算法
+## 概念介绍
+
+### 队列
+
+队列就像我们日常生活中排队一样，所有的操作必须等到队伍的第一个人完成之后，才能轮到下一个人，而新来的人只能排在队尾。
+
+对于队列来说，添加数据的操作称之为入队，删除数据的操作称之为出队，入队跟出队只能在队列的两端操作。
+
+我们用JavasScript中的数组来实现一下队列。
+
+```javascript
+// 首先定义一个队列
+const queue = new Array();
+// 数组的push() 配合 shift() ,实现尾部添加，头部删除
+queue.push('a'); // 入队
+queue.shift(); // 出队
+// or
+// 数组的 unshift() 配合 pop()，实现头部增加，尾部删除
+queue.unshift('a'); // 入队
+queue.pop(); // 出队
+```
+
+**不论使用什么实现队列数据结构，不能直接操作中间的数据，那样就不叫队列了。必须等到数据在首位后才能操作。**
+
+> 队列先进去的先出来，称之为First In First Out（先进先出），简称为 FIFO；
+>
+> 我们广度优先搜索算法中会使用到队列进行顶点管理
+
+### 图
+
+通常意义上我们所接触到的图都是图表，或者图片，而在计算机科学中的图长下面这样：
+
+<center>   
+	<img src="D:\my_space\Frontend-07-Template\Week02\media\epub_25016186_221.jpg" alt="epub_25016186_221" title="图片来源：我的第一本算法书" style="zoom:50%;" /> 
+    <br>
+    <span style="color:orange; border-bottom: 1px solid #d9d9d9;color: #999;padding: 2px;">图片来源：我的第一本算法书</span>
+</center>
+
+
+
+上图中的圆称之为顶点，连接顶点的称之为边，而顶点和边组合起来构成的图形就是图。
+
+每一条边上的值称之为权重，权重可以理解为，两个顶点间的距离，比如从B点到C点需要3个标准单位，从B点到A点需要4个标准单位。
+
+而图还有有向图和无向图之分，上图表示的是无向图，因为我们可以从A到B，也可以从B到A，是没有一个固定的方向的，反正，如果在A到B的边加上了箭头，则表示只能从A到B或者从B到A。
+
+如果我们想从A到F，那么那条路径最短呢？怎么找到这个最短的路径呢？
+
+假设有一个图，图上有顶点s和t，我们如何找到从s到t权重之和最小的路径？ 
+
+以上问题都是图的基本问题 -- 最短路径问题，而解决问题的算法，则是图的搜索算法。
+
+图的搜索指的就是从图的某一顶点开始，通过边到达不同的顶点，最终找到目标顶点的过程。根据搜索的顺序不同，图的搜索算法可分为“广度优先搜索”和“深度优先搜索”这两种。
+
+本文仅涉及广度优先搜索。
+
+## 寻路算法
+
+
+
+## 广度优先算法
+
 > 盲目搜索，全部顶点标记
 
 * 从开顶顶点为起点，访问其相邻结点
@@ -46,5 +106,7 @@ function inset(point){
 * https://blog.csdn.net/qq_43461641/article/details/100711157
 
 ## 参考文章
-* [让游戏角色快速找到最优路线：详解寻路算法的演进](https://gameinstitute.qq.com/community/detail/119033) 
+* [Introduction to the A* Algorithm](https://www.redblobgames.com/pathfinding/a-star/introduction.html) 
+* [A* Pathfinding for Beginners](https://www.gamedev.net/tutorials/_/technical/artificial-intelligence/a-pathfinding-for-beginners-r2003/)
 
+* 《我的第一本算法书》

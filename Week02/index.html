@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="map"></div>
+  <script>
+    const box = document.getElementById
+    const row = 5;
+    const col = 7;
+    const map = [
+      0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 1, 0, 0, 0,
+      0, 3, 0, 1, 0, 4, 0,
+      0, 0, 0, 1, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0,
+    ];
+    const innerHtml = '';
+    for (let i = 0; i < row; i++) {
+      for (let j = 0; j < col; j++) {
+        const item = map[row * i + j];
+        innerHtml += `<div class="cell ${item === 1? 'iswall' : item === 3 ? 'isstart' : item === 4 ? 'isend' : ''}"><div>`
+      }
+    }
+    box.innerHtml = innerHtml;
+  </script>
+</body>
+
+</html>
