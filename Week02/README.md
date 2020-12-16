@@ -34,10 +34,11 @@ queue.pop(); // 出队
 通常意义上我们所接触到的图都是图表，或者图片，而在计算机科学中的图长下面这样：
 
 <center>   
-	<img src="D:\my_space\Frontend-07-Template\Week02\media\epub_25016186_221.jpg" alt="epub_25016186_221" title="图片来源：我的第一本算法书" style="zoom:50%;" /> 
+	<img src="./media/epub_25016186_221.jpg" alt="epub_25016186_221" title="图片来源：我的第一本算法书" style="zoom:50%;" /> 
     <br>
     <span style="color:orange; border-bottom: 1px solid #d9d9d9;color: #999;padding: 2px;">图片来源：我的第一本算法书</span>
 </center>
+
 
 
 
@@ -66,10 +67,11 @@ queue.pop(); // 出队
 * 重复以上步骤直到找到目标点或遍历完全图
 
 <center>   
-	<img src="D:\my_space\Frontend-07-Template\Week02\media\8010FF73-160A-4134-81FB-39EC42F11A48.png" alt="epub_25016186_221" title="图片来源：Introduction to the A* Algorithm" style="zoom:50%;" /> 
+	<img src="./media/8010FF73-160A-4134-81FB-39EC42F11A48.png" alt="epub_25016186_221" title="图片来源：Introduction to the A* Algorithm" style="zoom:50%;" /> 
     <br>
     <span style="color:orange; border-bottom: 1px solid #d9d9d9;color: #999;padding: 2px;">图片来源：Introduction to the A* Algorithm</span>
 </center>
+
 > 蓝色边框代表可访问领结点，蓝色背景代表当前选中的领结点，绿色代表领结点的领结点
 
 把上面的流程翻译成程序执行顺序，如下：
@@ -79,31 +81,53 @@ queue.pop(); // 出队
 * 判断队列queue是否有值，有值则执行以下操作
   * 从队列中取出顶点p，由于队列先进先出原理，我们取到的点是先入队的点。
   * 将p顶点周围未被访问过的顶点入队列
-  * 标注顶点p为visited
+  * 将入队顶点标注为visited
+* 循环上述操作，直到queue中没有元素，或找到目标元素。
 
-
+用JavaScript来实现一下：
 
 ```javascript
-function find(start,end){
-    const queue = [start];
-    while(queue.length){
-    	// 拿到开始顶点
-        cosnt point = queue.shift();
-        // 判断是否是目标点，是则返回
-        // 不是目标点则寻找目标点周围点
-        inset(point);
-        ...
+const row = 5;
+const col = 7;
+// 使用一维数组模拟
+const map = [
+  0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 1, 0, 0, 0,
+  0, 0, 0, 1, 0, 0, 0,
+  0, 0, 0, 1, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0,
+];
+function find(start, end) {
+  const queue = [start]; // 创建队列
+  while (queue.length) { // 判断队列长度
+    const point = queue.shift();
+    if (point[0] === end[0] && point[1] === end[1]) { // 判断是否找到目标点
+      break;
     }
+    inset(queue, [point[0] - 1, point[1]]); // 搜索相邻结点
+    inset(queue, [point[0] + 1, point[1]]);	// 搜索相邻结点
+    inset(queue, [point[0], point[1] - 1]);	// 搜索相邻结点
+    inset(queue, [point[0], point[1] + 1]);	// 搜索相邻结点
+  }
 }
 
-function inset(point){
-    //获取point周边的点
-   	// 判断是否有标记,有则返回
-    // 没有则进行标记，反正重复查找
+function inset(queue, point) {
+  const index = point[0] * col + point[1];
+  if (point[0] < 0 || point[1] < 0 || index < 0 || index > 35) {
+    return; // 判断边界
+  }
+  if (map[index]) { // 判断是否有值，有值则代表已经访问过
+    return;
+  }
+  map[index] = 2; // 更新顶点状态
+  queue.push(point); // 入队操作
 }
 ```
 
+广度优先算法可以访问地方上的所有内容，可以判断从某一点能否到达另一点，但是没有构造出具体路径，所以我们需要修改一下入队操作，记录每个顶点的来源，这样就可以找到我们具体的路径。
+
 ## Dijkstra 算法
+
 > 盲目搜索，最短路径
 * Dijkstra 算法基于宽度优先算法进行改进，把当前看起来最短的边加入最短路径树中 ，利用贪心算法计算并最终能够产生最优结果的算法
 * https://blog.csdn.net/sinat_36521655/article/details/82085936

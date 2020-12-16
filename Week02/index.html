@@ -8,6 +8,7 @@
   <title>Document</title>
   <style>
     .cell {
+      display: inline-flex;
       width: 44px;
       height: 44px;
       border-right: 1px solid #ccc;
@@ -18,16 +19,25 @@
       background-color: #999;
     }
 
-    .isstart {
-      
-    }
+    .isstart {}
   </style>
 </head>
 
 <body>
   <div id="map"></div>
   <script>
-    const box = document.getElementById
+    class Dictionary {
+
+    }
+    class Graph {
+      constructor(isDirected = false) {
+        this.isDirected = isDirected;
+        this.vertices = [];
+        this.adjList = new Dictionary();
+      }
+    }
+
+    const box = document.getElementById('map');
     const row = 5;
     const col = 7;
     const map = [
@@ -37,14 +47,43 @@
       0, 0, 0, 1, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0,
     ];
-    const innerHtml = '';
+    let innerHtml = '';
     for (let i = 0; i < row; i++) {
       for (let j = 0; j < col; j++) {
-        const item = map[row * i + j];
-        innerHtml += `<div class="cell ${item === 1? 'iswall' : item === 3 ? 'isstart' : item === 4 ? 'isend' : ''}"><div>`
+        const item = map[col * i + j];
+        innerHtml +=
+          `<div class="cell ${item === 1? 'iswall' : item === 3 ? 'isstart' : item === 4 ? 'isend' : ''}"></div>`
+      }
+      innerHtml += '<br>';
+    }
+    box.innerHTML = innerHtml;
+
+    function find(start, end) {
+      const table = [];
+      const queue = [start];
+      while (queue.length) {
+        const point = queue.shift();
+        if (point[0] === end[0] && point[1] === end[1]) {
+          break;
+        }
+        inset(queue, [point[0] - 1, point[1]]);
+        inset(queue, [point[0] + 1, point[1]]);
+        inset(queue, [point[0], point[1] - 1]);
+        inset(queue, [point[0], point[1] + 1]);
       }
     }
-    box.innerHtml = innerHtml;
+
+    function inset(queue, point) {
+      const index = point[0] * col + point[1];
+      if (point[0] < 0 || point[1] < 0 || index < 0 || index > 35) {
+        return;
+      }
+      if (map[index]) {
+        return;
+      }
+      map[index] = 2;
+      queue.push(point);
+    }
   </script>
 </body>
 
