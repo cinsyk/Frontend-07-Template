@@ -1,5 +1,5 @@
-# 如何用javascript实现寻路算法
-最近参加winter老师的前端训练营，上周的作业是实现一个最优的寻路算法，非科班出生的我，对于寻路算法的概念及实现都不甚了解，虽然勉强实现了基本寻路效果，但是对于如何优化毫无想法。痛定思痛，从最基础开始学习，彻底理解寻路算法！
+# 【寻路算法】--- 广度优先搜索
+最近参加winter老师的前端训练营，上周的作业是实现一个最优的寻路算法，非科班出生的我，对于寻路算法的概念及实现都不甚了解，虽然勉强实现了基本寻路效果，但是对于如何优化毫无想法。痛定思痛，从最基础开始学习，争取彻底理解寻路算法！
 
 ## 概念介绍
 
@@ -54,11 +54,11 @@ queue.pop(); // 出队
 
 以上问题都是图的基本问题 -- 最短路径问题，解决这个问题的算法称之为寻路算法。
 
-## 广度优先算法
+## 广度优先搜索
 
 > 盲目搜索，全部顶点标记
 
-广度优先算法（BFS）是一种对图进行搜索的算法，也是最简单的寻路算法， 它的特点是从起点开始，由近及远的搜索全图，直到找到目标或遍历完全图为止。
+广度优先搜索（BFS）是最简单的寻路算法， 它的特点是从起点开始，由近及远的搜索全图，直到找到目标或遍历完全图为止。
 
 它的搜索流程如下：
 
@@ -89,12 +89,12 @@ queue.pop(); // 出队
 ```javascript
 const row = 5;
 const col = 7;
-// 使用一维数组模拟
+// 使用一维数组模拟地图
 const map = [
   0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 1, 0, 0, 0,
-  0, 0, 0, 1, 0, 0, 0,
-  0, 0, 0, 1, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0,
 ];
 function find(start, end) {
@@ -124,7 +124,45 @@ function inset(queue, point) {
 }
 ```
 
-广度优先算法可以访问地方上的所有内容，可以判断从某一点能否到达另一点，但是没有构造出具体路径，所以我们需要修改一下入队操作，记录每个顶点的来源，这样就可以找到我们具体的路径。
+广度优先搜索可以访问地方上的所有内容，可以判断从某一点能否到达另一点，但是没有构造出具体路径，所以我们需要修改一下入队操作，记录每个顶点的来源，这样就可以找到我们具体的路径。修改一下我们的代码
+
+```javascript
+function find(start, end) {
+  ...
+  while (queue.length) { // 判断队列长度
+     const table = Object.create(map); // 防止污染原数据
+     const point = queue.shift();
+     if (point[0] === end[0] && point[1] === end[1]) { // 判断是否找到目标点
+      	const path = [];
+        while(point[0] !== start[0] || point[1] !== start[1]){ // 判断是否回到起点
+			path.push(point);
+            point = table[index];
+        }
+        break;
+     }
+     inset(queue, [point[0] - 1, point[1]], point, table); // 搜索相邻结点,并传入point记录来源，传入数据的副本
+     ...
+  }
+}
+    
+function inset(queue, point, origin, map) {
+  ...
+  map[index] = origin; // 更新顶点,记录来源
+  ...
+}
+  
+// 调用方法
+find([0,0],[4,4]); // 输出path为：[[4,4],[4,3],[4,2],[4,1],[4,0],[3,0],[2,0],[1,0]]
+```
+
+至此，我们实现了最简单的寻路算法。
+
+## 后续更新
+
+* 【寻路算法】--- Dijkstra 算法
+* 【寻路算法】--- 贪婪最佳优先搜索
+* 【寻路算法】--- A*算法
+* 【寻路算法】--- B*算法
 
 ## Dijkstra 算法
 
@@ -144,8 +182,9 @@ function inset(queue, point) {
 > 效率比A*更快
 * https://blog.csdn.net/qq_43461641/article/details/100711157
 
+
 ## 参考文章
 * [Introduction to the A* Algorithm](https://www.redblobgames.com/pathfinding/a-star/introduction.html) 
 * [A* Pathfinding for Beginners](https://www.gamedev.net/tutorials/_/technical/artificial-intelligence/a-pathfinding-for-beginners-r2003/)
-
 * 《我的第一本算法书》
+* 《学习JavaScript数据结构与算法》
