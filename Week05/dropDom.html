@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #dropBox {
+      display: inline-block;
+      width: 88px;
+      height: 88px;
+      background-color: pink;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container">
+    心理测试选abcdef是什么测试
+    （1）按测验的内容分：能力测验（智力测验、反应能力测验）；学绩测验，如成套的成就测验；人格测验如EPQ、MMPI等。
+    （2）按测验的对象特点分：个别测验和团体测验。
+    （3）按测验表现形式分：文字测验（纸笔测验）和非文字测验。
+    （4）按测验的目的分：描述性测验、诊断性测验、预测性测验。
+    （5）按测验的时间分：速度测验和难度测验。
+    （6）按测验要求分：有最高作为测验和典型行为测验。前者要求被试尽可能作出最好的回答，而且有正确的答案。能力测验、学绩测验均属此类。后者要求被试按照日常习惯回答，无正确答案，所有人格测验均可称为典型行为测验。
+    EMC试验测ABC级怎么判定
+    你指的是电磁兼容里面测试EMS项目时的性能判据么？
+    性能判据A:就是屁都没影响
+    性能判据B:设备可以自己恢复正常
+    性能判据C:需要手动干预才能恢复正常。
+    怎样测量三相电源的abc相
+    需要用专来用的相序表来测量源，三相表笔分别接触电源三相，按住测试按扭，如果表记正转，则被测三相电源为正相序，也就是说电源依次为ABC相。
+    给CPU加压能够提高超频成功机率、增强工作稳定性几乎是一条定律，这其实是一种假象，电压越高CPU运算出错的机率就越大，高压极限超频一般都仅能跑SuperPi，无法长时间稳定运行。因此更多的超频玩家关注的就是一颗CPU在不加压的情况下能超到多少。三相交流电较单相交流电有很多优点，它在发电、输配电以及电能转换成机械能等方面都有明显的优越性。例如：制造三相发电机、变压器都较制造容量相同的单相发电机、变压器节省材料，而且构造简单，性能优良。
+    由同样材料所制造的三相电机，其容量比单相电机大50%，在输送同样功率的情况下，三相输电线较单相输电线可节省有色金属25%，而且电能损耗较单相输电时少。由于三相交流电有上述优点所以获得了广泛的应用。
+  </div>
+  <div id="dropBox"></div>
+</body>
+<script>
+  // 普通拖拽
+  const box = document.getElementById('dropBox');
+  let baseX = 0;
+  let baseY = 0;
+  box.addEventListener('mousedown', event => {
+    const startX = event.clientX;
+    const startY = event.clientY;
+    const up = (event) => {
+      baseX = baseX + event.clientX - startX;
+      baseY = baseY + event.clientY - startY;
+      document.removeEventListener('mouseup', up);
+      document.removeEventListener('mousemove', move);
+      document.removeEventListener('selectstart', stopDefault);
+    };
+    const move = (event) => {
+      let range = getNearRest(event.clientX, event.clientY);
+      range.insertNode(box);
+      // box.style.transform = `translate(${baseX + event.clientX - startX}px,${baseY + event.clientY - startY}px)`;
+    };
+    const stopDefault = event => event.preventDefault();
+
+    document.addEventListener('mouseup', up);
+    document.addEventListener('mousemove', move);
+    document.addEventListener('selectstart', stopDefault);
+  })
+
+  // 正常流拖拽
+  let ranges = [];
+  const container = document.getElementById('container');
+  const textNode = container.childNodes[0].textContent;
+  for (let i = 0; i < textNode.length; i++) {
+    const range = document.createRange();
+    range.setStart(container.childNodes[0], i);
+    range.setEnd(container.childNodes[0], i);
+    ranges.push(range);
+    console.log(range.getBoundingClientRect());
+  }
+
+  function getNearRest(x, y) {
+    let min = Infinity;
+    let nearrest = null;
+    for (const range of ranges) {
+      const rect = range.getBoundingClientRect();
+      const distance = (rect.x - x) ** 2 + (rect.y - y) ** 2;
+      if (distance < min) {
+        min = distance;
+        nearrest = range;
+      }
+    }
+    return nearrest;
+  }
+</script>
+
+</html>

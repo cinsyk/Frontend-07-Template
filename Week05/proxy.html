@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <input type="range" id="r" min="0" max="255">
+  <input type="range" id="g" min="0" max="255">
+  <input type="range" id="b" min="0" max="255">
+  <input type="range" id="a" min="0" max="1" step="0.01">
+</body>
+<script>
+  let useReactives = [];
+  let reactives = new Map();
+  let callbacks = new Map();
+  let object = {
+    r: 0,
+    g: 0,
+    b: 0,
+    a: 1
+  };
+
+  let po = reactive(object);
+
+  let domR = document.getElementById('r');
+  let domG = document.getElementById('g');
+  let domB = document.getElementById('b');
+  let domA = document.getElementById('a');
+  effect(() => {
+    domR.value = po.r;
+  })
+  effect(() => {
+    domG.value = po.g;
+  })
+  effect(() => {
+    domB.value = po.b;
+  })
+  effect(() => {
+    domA.value = po.a;
+  })
+  effect(() => {
+    document.body.style.background = `rgba(${po.r},${po.g},${po.b},${po.a})`;
+  })
+
+  domR.addEventListener('change', (event) => {
+    po.r = event.target.value
+  });
+  domG.addEventListener('change', (event) => {
+    po.g = event.target.value
+  });
+  domB.addEventListener('change', (event) => {
+    po.b = event.target.value;
+  });
+  domA.addEventListener('change', (event) => {
+    po.a = event.target.value;
+  });
+
+  function effect(callback) {
+    useReactives = [];
+    callback();
+
+    for (const reactivity of useReactives) {
+      const objKey = reactivity[0];
+      const objProp = reactivity[1];
+      if (!callbacks.has(objKey)) {
+        callbacks.set(objKey, new Map());
+      }
+      const item = callbacks.get(objKey);
+      if (!item.has(objProp)) {
+        item.set(objProp, []);
+      }
+      item.get(objProp).push(callback);
+    }
+  }
+
+  function reactive(object) {
+    if (reactives.has(object)) {
+      return reactives.get(object);
+    }
+    let proxy = new Proxy(object, {
+      set(obj, prop, val) {
+        obj[prop] = val;
+        const callKey = callbacks.get(obj);
+        const callProp = callKey && callKey.get(prop);
+        if (callKey && callProp) {
+          for (const callback of callProp) {
+            callback();
+          }
+        }
+        return obj[prop];
+      },
+      get(obj, prop) {
+        useReactives.push([obj, prop]);
+        if (typeof obj[prop] === 'object') {
+          return reactive(obj[prop]);
+        }
+        return obj[prop];
+      }
+    });
+    reactives.set(object, proxy);
+    return proxy;
+  }
+</script>
+
+</html>
