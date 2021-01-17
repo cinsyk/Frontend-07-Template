@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://gw.alipayobjects.com/os/lib/antv/g6/4.1.1/dist/g6.min.js"></script>
+</head>
+
+<body>
+
+  <div id="container" style="height: 100vh; width: 100vw;"></div>
+  <script>
+    const data = {
+      id: '',
+      children: [{
+        id: 'Fundamental Objects',
+        children: [{
+          id: 'Object'
+        }, {
+          id: 'Function'
+        }, {
+          id: 'Boolean'
+        }, {
+          id: 'Symbol'
+        }, {
+          id: 'Error',
+        }, {
+          id: 'Native Error',
+          children: [{
+            id: 'EvalError'
+          }, {
+            id: 'RangeError'
+          }, {
+            id: 'ReferenceError'
+          }, {
+            id: 'SyntaxError'
+          }, {
+            id: 'TypeError'
+          }, {
+            id: 'URIError'
+          }, {
+            id: 'InternalError'
+          }]
+        }]
+      }, {
+        id: 'Number and Dates',
+        children: [{
+          id: 'Number'
+        }, {
+          id: 'Math'
+        }, {
+          id: 'Date'
+        }]
+      }, {
+        id: 'Text Processing',
+        children: [{
+          id: 'String'
+        }, {
+          id: 'RegExp'
+        }]
+      }, {
+        id: 'Indexed Collections',
+        children: [{
+          id: 'Array'
+        }, {
+          id: 'TypedArray',
+          children: [{
+            id: 'Int8Array'
+          }, {
+            id: 'Uint8Array'
+          }, {
+            id: 'Uint8ClampedArray'
+          }, {
+            id: 'Int16Array'
+          }, {
+            id: 'Uint16Array'
+          }, {
+            id: 'Int32Array'
+          }, {
+            id: 'Uint32Array'
+          }, {
+            id: 'Float32Array'
+          }, {
+            id: 'Float64Array'
+          }]
+        }]
+      }, {
+        id: 'Keyed Collections',
+        children: [{
+          id: 'Map'
+        }, {
+          id: 'Set'
+        }, {
+          id: 'WeakMap'
+        }, {
+          id: 'WeakSet'
+        }]
+      }, {
+        id: 'Structured Data',
+        children: [{
+          id: 'ArrayBuffer'
+        }, {
+          id: 'SharedArrayBuffer'
+        }, {
+          id: 'DataView'
+        }, {
+          id: 'Atomics'
+        }, {
+          id: 'JSON'
+        }]
+      }, {
+        id: 'Control Abstraction Objects',
+        children: [{
+          id: 'Iteration'
+        }, {
+          id: 'GeneratorFunction'
+        }, {
+          id: 'AsyncGeneratorFunction'
+        }, {
+          id: 'Generator'
+        }, {
+          id: 'AsyncGenerator'
+        }, {
+          id: 'Promise'
+        }, {
+          id: 'AsyncFunction'
+        }]
+      }, {
+        id: 'Reflection',
+        children: [{
+          id: 'Reflect'
+        }, {
+          id: 'Proxy'
+        }, {
+          id: 'Module Namespace'
+        }]
+      }, {
+        id: 'Internationalization',
+        children: [{
+          id: 'Intl'
+        }, {
+          id: 'Intl.Collator'
+        }, {
+          id: 'Intl.DateTimeFormat'
+        }, {
+          id: 'Intl.DisplayNames'
+        }, {
+          id: 'Intl.ListFormat'
+        }, {
+          id: 'Intl.Locale'
+        }, {
+          id: 'Intl.NumberFormat'
+        }, {
+          id: 'Intl.PluralRules'
+        }, {
+          id: 'Intl.RelativeTimeFormat'
+        }]
+      }, {
+        id: 'WebAssembly ',
+        children: [{
+          id: 'WebAssembly'
+        }, {
+          id: 'WebAssembly.Module'
+        }, {
+          id: 'WebAssembly.Instance'
+        }, {
+          id: 'WebAssembly.Memory'
+        }, {
+          id: 'WebAssembly.Table'
+        }, {
+          id: 'WebAssembly.CompileError'
+        }, {
+          id: 'WebAssembly.LinkError'
+        }, {
+          id: 'WebAssembly.RuntimeError'
+        }]
+      }]
+    }
+
+    const container = document.getElementById('container');
+    const width = container.scrollWidth;
+    const height = container.scrollHeight || 500;
+    const graph = new G6.TreeGraph({
+      container: 'container',
+      width,
+      height,
+      modes: {
+        default: [{
+            type: 'collapse-expand',
+            onChange: function onChange(item, collapsed) {
+              const data = item.getModel();
+              data.collapsed = collapsed;
+              return true;
+            },
+          },
+          'drag-canvas',
+          'zoom-canvas',
+        ],
+      },
+      layout: {
+        type: 'compactBox',
+        direction: 'LR',
+        getVGap: function getVGap() {
+          return 20;
+        },
+        getHGap: function getHGap() {
+          return 200;
+        },
+      },
+    });
+
+    graph.node(function (node) {
+      return {
+        label: node.id,
+        labelCfg: {
+          offset: 10,
+          position: node.children && node.children.length > 0 ? 'left' : 'right',
+        },
+      };
+    });
+
+    graph.data(data);
+    graph.render();
+    graph.fitView();
+  </script>
+</body>
+
+</html>
