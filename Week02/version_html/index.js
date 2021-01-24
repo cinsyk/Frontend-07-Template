@@ -50,9 +50,9 @@ class baseMap {
         return;
       }
       if (table[index] != 0) {
-        console.log('当前结点', [x, y]);
-        console.log('前一个结点(第一次)：', table[index]);
-        console.log('前一个结点(第二次)：', pre);
+        // console.log('当前结点', [x, y]);
+        // console.log('前一个结点(第一次)：', table[index]);
+        // console.log('前一个结点(第二次)：', pre);
         return;
       }
       table[index] = pre;

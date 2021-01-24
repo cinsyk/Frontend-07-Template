@@ -21,13 +21,14 @@ function KMP (source, pattern) {
       }
     }
   }
+  console.log(table);
 
   // 匹配
   {
     let i = 0; // source的索引
     let j = 0; // pattern的索引
     while (i < source.length) {
-      if (j === pattern.length) {
+      if (j === pattern.length - 1) {
         return true
       }
       // 判断指针j的值是否等于指针i的值
@@ -47,4 +48,4 @@ function KMP (source, pattern) {
   }
 
 }
-console.log(KMP('aasdfsdfsdljsadsaf', 'sdfsd'));
+console.log(KMP('abababababx', 'abababx'));
