@@ -1,8 +1,9 @@
-# JS运算符的优先级
+# JavaScript表达式
+## JS运算符的优先级
 
 > 运算符的优先级会影响语法树的构成，在JavaScript中，使用产生式描述运算符的优先级。以下产生式优先级由高到底
 
-## Member Expressions
+### Member Expressions
 
 * 成员访问
 
@@ -20,14 +21,14 @@
 
 * new Foo()
 
-## New Expressions
+### New Expressions
 
 > 带括号的new 优先级比不带括号的new更高
 
 * new Foo
 
 
- > ### Reference（引用）
+ > #### Reference（引用）
  >
  > delete / assign 会用到引用特性
  >
@@ -36,27 +37,27 @@
  > * key
  >
 
-## Call Expressions
+### Call Expressions
 
 * foo()
 * foo()['b']
 * foo().b
 * foo()`abc`
 
-## Left handside & Right handside
+### Left handside & Right handside
 
 * left hand才能放到等号左边
 * 默认所有不属于lefthand 都属于righthand
 * 不能放到等号左边的都属于righthand
 
-## Update Expressions
+### Update Expressions
 
 * a++
 * a--
 * --a
 * ++a
 
-## Unary Expressions
+### Unary Expressions
 
 * delete a.b
 
@@ -76,13 +77,13 @@
 
 * await a
 
-## Exponental Expressions
+### Exponental Expressions
 
 > 唯一一个右结合
 
 * \**
 
-## Multiplicative Expressions
+### Multiplicative Expressions
 
 > 要求左右两边都是Number类型，会发生类型转换
 
@@ -90,12 +91,12 @@
 * /
 * %
 
-## Additive Expressions
+### Additive Expressions
 
 * +
 * -
 
-## Shift Expressions
+### Shift Expressions
 
 > 要求左右两边都是Number类型，会发生类型转换
 
@@ -103,7 +104,7 @@
 * \>>
 * \>>>
 
-## Relationship Expressions
+### Relationship Expressions
 
 * \<
 * \>
@@ -111,7 +112,7 @@
 * \>=
 * instanceof in
 
-## Equality Expressions
+### Equality Expressions
 
 * ==
 
@@ -123,30 +124,24 @@
 
 * !==
 
-## Bitwise Expressions
+### Bitwise Expressions
 
 * & ^ |
 
-## Logical Expressions
+### Logical Expressions
 
 > 短路原则
 
 * &&
 * ||
 
-## Conditional Expressions
+### Conditional Expressions
 
 > 短路逻辑
 >
-> 唯一的三木运算符
+> 唯一的三目运算符
 
 * ? :
-
-
-
-
-
-
 
 
 
